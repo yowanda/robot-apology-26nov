@@ -20,6 +20,17 @@ def main() -> None:
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(ENTRY)
 
+    # Runtime validation: read the file back and confirm it is exactly
+    # two lines totalling 1-400 characters; rewrite only if valid, so the
+    # output bytes never change.
+    with open(path, "r", encoding="utf-8", newline="\n") as f:
+        text = f.read()
+    lines = text.split("\n")
+    assert text.endswith("\n") and len(lines) == 3 and lines[2] == "", "entry must be exactly 2 lines"
+    assert 1 <= len(text) <= 400, "entry must be 1-400 characters"
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+
 
 if __name__ == "__main__":
     main()
